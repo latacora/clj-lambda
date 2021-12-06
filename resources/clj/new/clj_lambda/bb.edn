@@ -1,0 +1,11 @@
+{:paths ["."]
+ :tasks
+ {:requires ([babashka.fs :as fs]
+             [build-shared :as bs])
+  ;; Speedier uberjar from https://blog.michielborkent.nl/speeding-up-builds-fs-modified-since.html
+  uber {:doc "Build uberjar"
+        :task (let [jar-file (format "%s/%s-%s.jar" "target" (name bs/lib) bs/version)
+                    src-dir "src"]
+                (if (seq (fs/modified-since jar-file [src-dir]))
+                  (clojure "-T:build uber")
+                  (println "Uberjar is already up to date" jar-file)))}}}
