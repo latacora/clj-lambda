@@ -40,4 +40,12 @@
   lambda-update
   {:doc "Updates lambda with latest code uberjared"
    :depends [uber]
-   :task (shell (str "aws lambda update-function-code --function-name {{name}} --zip-file fileb://" jar-file))}}}
+   :task (shell (str "aws lambda update-function-code --function-name {{name}} --zip-file fileb://" jar-file))}
+
+  lambda-invoke
+  {:doc "Invoke lambda with given edn event"
+   :requires ([cheshire.core :as json]
+              [clojure.edn :as edn])
+   :task (shell "aws lambda invoke --cli-binary-format raw-in-base64-out --function-name baz --payload"
+                (json/generate-string (edn/read-string (first *command-line-args*)))
+                "/dev/stdout")}}}
