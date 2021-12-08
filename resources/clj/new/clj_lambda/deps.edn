@@ -3,13 +3,15 @@
         cheshire/cheshire {:mvn/version "5.10.1"}
         com.amazonaws/aws-lambda-java-core {:mvn/version "1.2.1"}}
  :aliases
- {:build {:deps {io.github.seancorfield/build-clj
-                 {:git/tag "v0.4.0" :git/sha "54e39ae"}}
+ {;; Run build tasks like uberjar
+  :build {:deps {io.github.seancorfield/build-clj
+                 {:git/tag "v0.6.0" :git/sha "2451bea"}}
           :ns-default build}
+  ;; Run tests
   :test {:extra-paths ["test"]
-         :extra-deps {org.clojure/test.check {:mvn/version "1.1.0"}
-                      io.github.cognitect-labs/test-runner
+         :extra-deps {io.github.cognitect-labs/test-runner
                       {:git/tag "v0.5.0" :git/sha "48c3c67"}}
          :exec-fn cognitect.test-runner.api/test}
+  ;; Run code linter
   :clj-kondo {:extra-deps {clj-kondo/clj-kondo {:mvn/version "RELEASE"}}
               :main-opts  ["-m" "clj-kondo.main" "--lint" "src" "test"]}}}

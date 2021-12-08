@@ -8,15 +8,21 @@ jobs:
   test:
     runs-on: ubuntu-20.04
     steps:
+      - name: Check outdated dependencies
+        uses: liquidz/antq-action@master
+
+  project-test:
+    runs-on: ubuntu-20.04
+    steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/setup-java@v2.1.0
+      - uses: actions/setup-java@v2.4.0
         with:
           java-version: 11
           distribution: 'zulu'
 
       - name: Setup Clojure
-        uses: DeLaGuardo/setup-clojure@3.5
+        uses: DeLaGuardo/setup-clojure@3.6
         with:
           tools-deps: "1.10.3.1040"
 
@@ -28,3 +34,6 @@ jobs:
 
       - name: Run project's tests
         run: cd bar && clojure -X:test
+
+      - name: Run project's uberjar
+        run: cd bar && clojure -T:build uber
