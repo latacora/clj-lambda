@@ -1,6 +1,7 @@
 (ns {{namespace}}
   (:require [clojure.java.io :as io]
             [cheshire.core :as json])
+  #_:clj-kondo/ignore
   (:import [com.amazonaws.services.lambda.runtime RequestStreamHandler])
   (:gen-class
    :name {{namespace}}.handler
