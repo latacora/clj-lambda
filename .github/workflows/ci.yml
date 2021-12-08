@@ -1,0 +1,30 @@
+---
+name: CI
+
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-java@v2.1.0
+        with:
+          java-version: 11
+          distribution: 'zulu'
+
+      - name: Setup Clojure
+        uses: DeLaGuardo/setup-clojure@3.5
+        with:
+          tools-deps: "1.10.3.1040"
+
+      - name: Generate project with template
+        run: clojure -X:new :name com.example/bar
+
+      - name: Run project's linter
+        run: cd bar && clojure -M:clj-kondo
+
+      - name: Run project's tests
+        run: cd bar && clojure -X:test
