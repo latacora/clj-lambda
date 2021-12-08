@@ -14,4 +14,7 @@
          :exec-fn cognitect.test-runner.api/test}
   ;; Run code linter
   :clj-kondo {:extra-deps {clj-kondo/clj-kondo {:mvn/version "RELEASE"}}
-              :main-opts  ["-m" "clj-kondo.main" "--lint" "src" "test"]}}}
+              :main-opts  ["-m" "clj-kondo.main" "--lint" "src" "test"]}
+  ;; Run style linter
+  :cljfmt {:extra-deps {cljfmt/cljfmt {:mvn/version "0.8.0"}}
+           :main-opts ["-m" "cljfmt.main"]}}}
