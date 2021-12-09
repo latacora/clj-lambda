@@ -30,17 +30,13 @@ jobs:
         with:
           tools-deps: "1.10.3.1040"
 
+      - name: Setup Babashka
+        uses: turtlequeue/setup-babashka@v1.3.0
+        with:
+          babashka-version: 0.6.8
+
       - name: Generate project with template
         run: clojure -X:new :name com.example/bar
 
-      - name: Run project's tests
-        run: cd bar && clojure -X:test
-
-      - name: Run project's uberjar
-        run: cd bar && clojure -T:build uber
-
-      - name: Run project's style linter
-        run: cd bar && clojure -M:cljfmt check
-
-      - name: Run project's code linter
-        run: cd bar && clojure -M:clj-kondo
+      - name: Run project's CI job
+        run: cd bar && bb ../script/run-workflow-job.clj .github/workflows/ci.yml test
