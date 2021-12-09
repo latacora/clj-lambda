@@ -16,7 +16,7 @@ Lambda. The generated project provides the following:
 clojure -Ttools install com.github.seancorfield/clj-new '{:git/tag "v1.2.362"}' :as clj-new
 
 # Generate a project. Quoting inside template string is necessary
-clojure -Tclj-new create :template '"https://github.com/latacora/clj-lambda-template@LATEST_SHA"' :name com.example/bar
+clojure -Tclj-new create :template '"https://github.com/latacora/clj-lambda@LATEST_SHA"' :name com.example/bar
 ```
 
 ## Development
