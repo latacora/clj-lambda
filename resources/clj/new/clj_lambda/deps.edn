@@ -17,4 +17,8 @@
               :main-opts  ["-m" "clj-kondo.main" "--lint" "src" "test"]}
   ;; Run style linter
   :cljfmt {:extra-deps {cljfmt/cljfmt {:mvn/version "0.8.0"}}
-           :main-opts ["-m" "cljfmt.main"]}}}
+           :main-opts ["-m" "cljfmt.main"]}
+  ;; Check dependencies are up to date
+  :outdated
+  {:extra-deps {com.github.liquidz/antq {:mvn/version "RELEASE"}}
+   :main-opts ["-m" "antq.core" "--exclude" "com.github.liquidz/antq"]}}}

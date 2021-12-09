@@ -20,14 +20,17 @@ jobs:
         with:
           tools-deps: "1.10.3.1040"
 
-      - name: Run project's tests
+      - name: Run tests
         run: clojure -X:test
 
-      - name: Run project's uberjar
-        run: clojure -T:build uber
-
-      - name: Run project's style linter
+      - name: Run style linter
         run: clojure -M:cljfmt check
 
-      - name: Run project's code linter
+      - name: Run code linter
         run: clojure -M:clj-kondo
+
+      - name: Build uberjar
+        run: clojure -T:build uber
+
+      - name: Check dependencies are up to date
+        run: clojure -M:outdated

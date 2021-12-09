@@ -10,6 +10,9 @@
 (def handler-name "{{namespace}}.handler")
 
 (defn create
+  "Creates a lambda fn and execution role. The role also has permissions to
+  upload logs CloudWatch. This lambda is meant for development and a production
+  one should be managed by a more appropriate tool like terraform"
   [jar-file]
   (let [policy {"Version" "2012-10-17"
                 "Statement" [{"Effect" "Allow" "Principal" {"Service" "lambda.amazonaws.com"} "Action" "sts:AssumeRole"}]}
@@ -30,6 +33,8 @@
     (again/with-retries
       [5000 10000]
       (shell (format
+              ;; These options are known to work but they should be changed to fit
+              ;; your lambda's needs
               "aws lambda create-function --function-name %s --zip-file fileb://%s --role %s --runtime java11 --memory-size 256 --handler %s"
               fn-name
               jar-file
@@ -37,6 +42,7 @@
               handler-name)))))
 
 (defn update-code
+  "Updates lambda with the latest local code"
   [jar-file]
   (shell "aws lambda update-function-code --function-name"
          fn-name
@@ -44,6 +50,7 @@
          (str "fileb://" jar-file)))
 
 (defn invoke
+  "Invokes lambda with given event as an EDN string"
   [args]
   (shell "aws lambda invoke --cli-binary-format raw-in-base64-out --function-name"
          fn-name
