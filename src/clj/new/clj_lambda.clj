@@ -15,4 +15,5 @@
              ["script/lambda.clj" (render "lambda.clj" data)]
              ["src/{{nested-dirs}}.clj" (render "core.clj" data)]
              ["test/{{nested-dirs}}_test.clj" (render "core_test.clj" data)]
-             [".github/workflows/ci.yml" (render "ci.yml" {})])))
+             [".github/workflows/ci.yml" (render "ci.yml" {})]
+             ["README.md" (render "README.md" {})])))
