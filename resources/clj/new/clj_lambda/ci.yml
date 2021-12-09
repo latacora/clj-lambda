@@ -1,0 +1,33 @@
+---
+name: CI
+
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-java@v2.4.0
+        with:
+          java-version: 11
+          distribution: 'zulu'
+
+      - name: Setup Clojure
+        uses: DeLaGuardo/setup-clojure@3.6
+        with:
+          tools-deps: "1.10.3.1040"
+
+      - name: Run project's tests
+        run: clojure -X:test
+
+      - name: Run project's uberjar
+        run: clojure -T:build uber
+
+      - name: Run project's style linter
+        run: clojure -M:cljfmt check
+
+      - name: Run project's code linter
+        run: clojure -M:clj-kondo

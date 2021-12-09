@@ -14,4 +14,5 @@
              ["bb.edn" (render "bb.edn" {})]
              ["script/lambda.clj" (render "lambda.clj" data)]
              ["src/{{nested-dirs}}.clj" (render "core.clj" data)]
-             ["test/{{nested-dirs}}_test.clj" (render "core_test.clj" data)])))
+             ["test/{{nested-dirs}}_test.clj" (render "core_test.clj" data)]
+             [".github/workflows/ci.yml" (render "ci.yml" {})])))
