@@ -1,0 +1,29 @@
+{:paths ["." "script"]
+ :deps {listora/again {:mvn/version "1.0.0"}}
+ :tasks
+ {:init
+  (do
+    (def jar-file (format "%s/%s-%s.jar" "target" (name bs/lib) bs/version)))
+  :requires ([babashka.fs :as fs]
+             [build-shared :as bs]
+             [lambda])
+  ;; Speedier uberjar from https://blog.michielborkent.nl/speeding-up-builds-fs-modified-since.html
+  uber {:doc "Build uberjar"
+        :task (let [src-dir "src"]
+                (if (seq (fs/modified-since jar-file [src-dir]))
+                  (clojure "-T:build uber")
+                  (println "Uberjar is already up to date" jar-file)))}
+
+  lambda-create
+  {:doc "Creates a minimal lambda with a role to execute it and logging setup"
+   :depends [uber]
+   :task (lambda/create jar-file)}
+
+  lambda-update-code
+  {:doc "Updates lambda with latest code uberjared"
+   :depends [uber]
+   :task (lambda/update-code jar-file)}
+
+  lambda-invoke
+  {:doc "Invoke lambda with given edn event"
+   :task (lambda/invoke *command-line-args*)}}}
