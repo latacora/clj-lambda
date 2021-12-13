@@ -9,6 +9,27 @@
 (def fn-name "{{name}}")
 (def handler-name "{{namespace}}.handler")
 
+(defn- create-fn
+  [role-arn jar-file]
+  ;; Retries because role needs time to create. When role isn't created
+  ;; we see the error 'The role defined for the function cannot be
+  ;; assumed by Lambda.'
+  (again/with-retries
+    {::again/callback (fn [attempt]
+                        (case (::again/status attempt)
+                          :retry (println "Retrying...")
+                          :success (println "Success!")
+                          nil))
+     ::again/strategy [5000 10000]}
+    (shell (format
+            ;; These options are known to work but they should be changed to fit
+            ;; your lambda's needs
+            "aws lambda create-function --function-name %s --zip-file fileb://%s --role %s --runtime java11 --memory-size 256 --handler %s"
+            fn-name
+            jar-file
+            role-arn
+            handler-name))))
+
 (defn create
   "Creates a lambda fn and execution role. The role also has permissions to
   upload logs CloudWatch. This lambda is meant for development and a production
@@ -26,20 +47,9 @@
                      (get-in ["Role" "Arn"]))]
     (shell "aws iam attach-role-policy --role-name"
            role-name
-           "--policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole")
-    ;; Retries because role needs time to create. When role isn't created
-    ;; we see the error 'The role defined for the function cannot be
-    ;; assumed by Lambda.'
-    (again/with-retries
-      [5000 10000]
-      (shell (format
-              ;; These options are known to work but they should be changed to fit
-              ;; your lambda's needs
-              "aws lambda create-function --function-name %s --zip-file fileb://%s --role %s --runtime java11 --memory-size 256 --handler %s"
-              fn-name
-              jar-file
-              role-arn
-              handler-name)))))
+           "--policy-arn"
+           "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole")
+    (create-fn role-arn jar-file)))
 
 (defn update-code
   "Updates lambda with the latest local code"
