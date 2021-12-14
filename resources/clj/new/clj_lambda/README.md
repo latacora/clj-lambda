@@ -4,27 +4,36 @@ TODO
 
 ## Prerequisites
 
-Be sure to have installed:
+Be sure to have installed and setup:
 
 * Clojure and [Clojure CLI](https://clojure.org/releases/tools) >= 1.10.3.1040
 * [Babashka](https://github.com/babashka/babashka) >= 0.6.8
 * [AWS CLI v2](https://github.com/aws/aws-cli/tree/v2)
+* AWS credentials. Recommend using
+  [aws-vault](https://github.com/99designs/aws-vault). Most commands below
+  would then be prefixed with `aws-vault exec my-profile -- ...`
 
 ## Usage
 
-To build your project's uberjar: `bb uber`
-
 ### Create lambda
 
-To uberjar and create a lambda fn: `bb lambda-create`. This is a basic lambda with permissions to write to CloudWatch. To do more interesting things with your lambda you'll probably want to use terraform.
+To uberjar and create a lambda fn: `bb lambda-create`. This is a basic lambda
+with permissions to write to CloudWatch. To do more interesting things with
+lambda consider using terraform.
 
 ### Update lambda
 
-If you used `bb lambda-create` to create your lambda, you can update your fn with a local version of your code with `bb lambda-update-code`
+If lambda was created with `bb lambda-create`, update fn with local code using
+`bb lambda-update-code`.
 
 ### Invoke lambda
 
-Invoke your lambda with the payload as an EDN string e.g. `bb lambda-invoke '{:foo :bar}'`.
+Invoke lambda with the payload as an EDN string e.g. `bb lambda-invoke '{:foo
+:bar}'`.
+
+### Build uberjar
+
+To build the uberjar: `bb uber`.
 
 ## Development
 

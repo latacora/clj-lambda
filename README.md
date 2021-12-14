@@ -19,6 +19,8 @@ clojure -Ttools install com.github.seancorfield/clj-new '{:git/tag "v1.2.362"}' 
 clojure -Tclj-new create :template '"https://github.com/latacora/clj-lambda@LATEST_SHA"' :name com.example/bar
 ```
 
+See [the template's README](resources/clj/new/clj_lambda/README.md#usage) for creating and invoking a lambda.
+
 ## Development
 
 Create a project from local version of template:
@@ -54,7 +56,11 @@ Your template will be deployed to com.latacora/clj-lambda on clojars.org by defa
 
 ## Tests
 
-CI confirms that the template generates correctly with a passing CI config. Dependencies need to be up to date for both this project and the generated project.
+CI confirms that the template generates correctly with a passing CI config.
+Dependencies need to be up to date for both this project and the generated
+project. To upgrade the project's dependencies: `clj -M:outdated --upgrade`. To
+upgrade the templates's dependencies: `clj -M:outdated -d
+resources/clj/new/clj_lambda --upgrade`.
 
 ## Alternatives
 
